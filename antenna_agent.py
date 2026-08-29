@@ -214,10 +214,21 @@ class AntennaAgent:
         return self._finalize()
 
     def _calculate_score(self, s11: float, freq: float) -> float:
-        """计算综合得分"""
+        """
+        计算综合得分
+
+        修复：当 target_s11 == -20 时避免除零错误
+        """
         score = 0.0
         if s11:
-            score += 0.7 * max(0, min(1, (s11 - self.target_s11) / (-20 - self.target_s11)))
+            denominator = -20 - self.target_s11
+            if abs(denominator) < 1e-9:
+                # target_s11 == -20 时，使用 10dB 作为评分范围
+                # 例如：s11=-25 → 0.5, s11=-30 → 1.0
+                s11_score = max(0, min(1, (s11 - self.target_s11) / 10))
+            else:
+                s11_score = max(0, min(1, (s11 - self.target_s11) / denominator))
+            score += 0.7 * s11_score
         if freq:
             freq_score = 1 - min(1, abs(freq - self.target_freq) / 0.5)
             score += 0.3 * max(0, freq_score)
