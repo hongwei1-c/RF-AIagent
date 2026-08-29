@@ -1,0 +1,24 @@
+﻿# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+config.py
+config.json
+*.log
+HFSS_CSV_Output/
+TLine_CSV_Output/
+HFSS_Agent_Workspace/
+TLine_AI_Workspace/
+TLine_Scripts/
+HFSS_Runs/
+*.tmp
+temp/
+error_log.txt
+*.bak
+*.bak2
+.idea/
+.vscode/
+.venv/
+venv/
